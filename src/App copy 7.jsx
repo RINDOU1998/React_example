@@ -13,7 +13,7 @@ const Main = () => {
     if (error) return <h1>Error loading user data: {`${error}`}</h1>;
     if (isLoading) return <h1>Loading user data...</h1>;
     if (!data) return <h1>No user data found</h1>;
-    return <div><CourseList2 courses={data.courses} /></div>;
+    return <div>{data.title}</div>;
   }
   
   const queryClient = new QueryClient();
@@ -103,7 +103,7 @@ return(
     <div className="container">
         <ul>
       <Banner title={schedule.title} />
-      
+      <CourseList2 courses={schedule.courses} />
       
       </ul>
       <Main/>

@@ -3,21 +3,9 @@ import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useJsonQuery } from './utilities/fetch';
+import { useQuery } from '@tanstack/react-query';
 
   
-const Main = () => {
-    const [data, isLoading, error] = useJsonQuery('https://courses.cs.northwestern.edu/394/guides/data/cs-courses.php');
-  
-    if (error) return <h1>Error loading user data: {`${error}`}</h1>;
-    if (isLoading) return <h1>Loading user data...</h1>;
-    if (!data) return <h1>No user data found</h1>;
-    return <div><CourseList2 courses={data.courses} /></div>;
-  }
-  
-  const queryClient = new QueryClient();
-
 const schedule = {
   "title": "CS Courses for 2018-2019",
   "courses": {
@@ -95,22 +83,19 @@ const Banner = ({ title }) => (
     </div>
   );
   
-  
+ 
   const App = () => {
-   
-return(
-    <QueryClientProvider client={queryClient}>
+    
+  return(
     <div className="container">
         <ul>
       <Banner title={schedule.title} />
-      
+      <CourseList2 courses={schedule.courses} />
       
       </ul>
-      <Main/>
     </div>
-    </QueryClientProvider>
   );
-       }; 
+        }; 
 //{courses(schedule.courses)}
 //<fetchJson url={"https://courses.cs.northwestern.edu/394/guides/data/cs-courses.php"} />
 export default App;
