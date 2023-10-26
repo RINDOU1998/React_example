@@ -1,26 +1,31 @@
-import { useState } from 'react';
+import {useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import {useQuery ,QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useJsonQuery } from './utilities/fetch';
-
+import {Filter} from '../components/Filter/Filter'
   
 const Example = (prop) =>{
   const {courseData, set_coursedata}=prop
   const { isLoading, error, data } = useQuery({
-    //queryKey: ['repoData'],
+    queryKey: ['repoData'],
     queryFn: () =>
       fetch('https://courses.cs.northwestern.edu/394/guides/data/cs-courses.php').then(
         (res) => res.json(),
       ),
   })
+  useEffect(() => {
+    if (!isLoading && !error && data) {
+      set_coursedata(data.courses);
+    }
+  }, [isLoading, error, data, set_coursedata]);
 
   if (isLoading) return 'Loading...'
 
   if (error) return 'An error has occurred: ' + error.message
-  set_coursedata(data.courses)
+  console.log({courseData})
   return (
     <div>
       <h1>{data.title}</h1>
@@ -31,7 +36,7 @@ const Example = (prop) =>{
 
 const Main = () => {
     const [data, isLoading, error] = useJsonQuery('https://courses.cs.northwestern.edu/394/guides/data/cs-courses.php');
-  
+
     if (error) return <h1>Error loading user data: {`${error}`}</h1>;
     if (isLoading) return <h1>Loading user data...</h1>;
     if (!data) return <h1>No user data found</h1>;
@@ -128,11 +133,13 @@ return(
       <Example courseData={courserData} set_coursedata={set_coursedata} />
       
       </ul>
+      
       <div><CourseList2 courses={courserData} /></div>
     </div>
     </QueryClientProvider>
   );
        }; 
 //{courses(schedule.courses)}
-//<fetchJson url={"https://courses.cs.northwestern.edu/394/guides/data/cs-courses.php"} />
+//<fetchJson url={"https://courses.cs.northwestern.edu/394/guides/data/cs-courses.php"} /><Filter courseData={courserData} set_coursedata={set_coursedata}/>
 export default App;
+//

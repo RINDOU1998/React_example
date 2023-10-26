@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 
-export const filter=(prop)=>{
+export const Filter=(prop)=>{
     const {coursedata,set_coursedata}=prop
     const [selectedFilterValue, setSelectedFilterValue] = useState("");
     const terms=["Spring","Fall","Winter"]
 
     useEffect(() => {
-        let filteredResults = [...coursedata];
+        let filteredResults = coursedata;
+       
         if (selectedFilterValue !== "none" && selectedFilterValue !== "") {
           filteredResults = filteredResults.filter(
-            (x) => x.term == selectedFilterValue
+            (x) => x.types[0] == selectedFilterValue
           );
+          //  (x) => x.term == selectedFilterValue
+         // );
+         //for (const key in keys){
+          //  if (coursedata[key].term==selectedFilterValue){
+          //    filteredResults[key]=coursedata[key]
+          //  }
+         //}
         }
         set_coursedata(filteredResults);
       }, [selectedFilterValue]);
