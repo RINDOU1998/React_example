@@ -3,10 +3,32 @@ import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {useQuery ,QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useJsonQuery } from './utilities/fetch';
 
   
+const Example = (prop) =>{
+  const {courseData, set_coursedata}=prop
+  const { isLoading, error, data } = useQuery({
+    //queryKey: ['repoData'],
+    queryFn: () =>
+      fetch('https://courses.cs.northwestern.edu/394/guides/data/cs-courses.php').then(
+        (res) => res.json(),
+      ),
+  })
+
+  if (isLoading) return 'Loading...'
+
+  if (error) return 'An error has occurred: ' + error.message
+  set_coursedata(data.courses)
+  return (
+    <div>
+      <h1>{data.title}</h1>
+     
+    </div>
+  )
+}
+
 const Main = () => {
     const [data, isLoading, error] = useJsonQuery('https://courses.cs.northwestern.edu/394/guides/data/cs-courses.php');
   
@@ -95,18 +117,18 @@ const Banner = ({ title }) => (
     </div>
   );
   
-  
+  //<Banner title={schedule.title} />
   const App = () => {
-   
+   const [courserData,set_coursedata]=useState([])
 return(
     <QueryClientProvider client={queryClient}>
     <div className="container">
         <ul>
-      <Banner title={schedule.title} />
       
+      <Example courseData={courserData} set_coursedata={set_coursedata} />
       
       </ul>
-      <Main/>
+      <div><CourseList2 courses={courserData} /></div>
     </div>
     </QueryClientProvider>
   );
