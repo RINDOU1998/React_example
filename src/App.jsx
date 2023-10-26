@@ -80,29 +80,30 @@ const Banner = ({ title }) => (
     </div>
   );
 
-  const CourseList = ({ courses }) => (
+ 
 
-    <div className="course_list">  
-     <ul>
-     {Object.keys(courses).map(courseKey => (
-    <table className="table table-bordered">
-      <tbody>
-        <tr><th style={{width: '7em'}}>Name</th><td>{courses[courseKey].term} {courses[courseKey].number}</td></tr>
-        <tr><th>Title</th><td>{courses[courseKey].title}</td></tr>
-        <tr><th>Meet</th><td>{courses[courseKey].meets}</td></tr>
-        
-      </tbody>
-    </table>
-    ))}
-    </ul>
+  
+
+   const Product = ({id, product, selected, toggleSelected}) => (
+    <div className="product card m-1 p-2" onClick={() => toggleSelected(id)}>
+      <img src={product.thumbnail} className="card-img-top" alt={product.title} />
+      <div className={`card-body ${selected.includes(id) ? 'selected' : ''}`}>
+        <h5 className="card-title">{product.title}</h5>
+        <p className="card-text">{product.description}</p>
+        <p className="card-text">{formatPrice(product.price)}</p>
+  
+      </div>
     </div>
   );
-  
-  const CourseCard = ({ course }) => {
 
+
+  const CourseCard = ({ cid, course,clickedcourse,handle_clickcourse}) => {
+    //console.log(clickedcourse)
+console.log(clickedcourse.includes(course))
    // console.log(course.term)
-   return( <div className="course-card card">
-      <div className="card-body">
+   return( <div className="course-card card " onClick={() => handle_clickcourse(course)}>
+      <div className={`card-body ${clickedcourse.includes(course) ? 'selected' : ''}`}>
+
         <h5 className="card-title">
           {course.term} {course.number}
         </h5>
@@ -133,7 +134,7 @@ const Banner = ({ title }) => (
     return(
     <div className="course-list">
       {filter_course.map(([cid,course]) => (
-        <CourseCard key={cid} course={course} />
+        <CourseCard key={cid} course={course} clickedcourse={clickedcourse} handle_clickcourse={handle_clickcourse}/>
       ))}
     </div>
   );
@@ -166,7 +167,7 @@ return(
       
       </ul>
       <Filter selectedTerm={selectedTerm} setSelectedTerm={setSelectedTerm}/>
-      <div><CourseList2 courses={courserData} selectedTerm={selectedTerm}/></div>
+      <div><CourseList2 courses={courserData} selectedTerm={selectedTerm} clickedcourse={clickedcourse} handle_clickcourse={handle_clickcourse}/></div>
     </div>
     </QueryClientProvider>
   );
