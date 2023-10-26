@@ -55,10 +55,7 @@ button {
     background-color:yellow;
       }
 
-.course-card .card-body .selected {
-    background-color:red;
-    color: green;
-  }
+
 
 .course-card .selected{
   background-color:red;

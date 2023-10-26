@@ -5,7 +5,7 @@ export const Filter=(prop)=>{
     const {selectedTerm, setSelectedTerm}=prop
     
     const terms=["Spring","Fall","Winter"]
-    console.log({selectedTerm})
+    //console.log({selectedTerm})
     // useEffect(() => {
     //     let filteredResults = coursedata;
        

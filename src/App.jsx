@@ -6,6 +6,9 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import {useQuery ,QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useJsonQuery } from './utilities/fetch';
 import {Filter} from '../components/Filter/Filter'
+import { Modal } from "../components/Modal/Modal"
+import {Menupage} from "../components/Menupage/Menupage"
+import Stack from "react-bootstrap/Stack";
   
 const Example = (prop) =>{
   const {courseData, set_coursedata}=prop
@@ -25,7 +28,7 @@ const Example = (prop) =>{
   if (isLoading) return 'Loading...'
 
   if (error) return 'An error has occurred: ' + error.message
-  console.log({courseData})
+  //console.log({courseData})
   return (
     <div>
       <h1>{data.title}</h1>
@@ -96,10 +99,10 @@ const Banner = ({ title }) => (
     </div>
   );
 
-
+  //clickedcourse.some(course=>course[0]===cid)
   const CourseCard = ({ cid, course,clickedcourse,handle_clickcourse}) => {
     //console.log(clickedcourse)
-console.log(clickedcourse.includes(course))
+    //console.log(cid)
    // console.log(course.term)
    return( <div className="course-card card " onClick={() => handle_clickcourse(course)}>
       <div className={`card-body ${clickedcourse.includes(course) ? 'selected' : ''}`}>
@@ -127,14 +130,14 @@ console.log(clickedcourse.includes(course))
     
       //console.log(filter_course.map((course)=>course[1].term))
       //console.log(filter_course)
-      console.log(selectedTerm)
+      //console.log(selectedTerm)
     //   console.log(Object.entries(courses).map(
     //     (course)=> course.term===selectedTerm
     // ))
     return(
     <div className="course-list">
-      {filter_course.map(([cid,course]) => (
-        <CourseCard key={cid} course={course} clickedcourse={clickedcourse} handle_clickcourse={handle_clickcourse}/>
+      {filter_course.map(([key,course]) => (
+        <CourseCard key={key} course={course} clickedcourse={clickedcourse} handle_clickcourse={handle_clickcourse}/>
       ))}
     </div>
   );
@@ -166,7 +169,12 @@ return(
       <Example courseData={courserData} set_coursedata={set_coursedata} />
       
       </ul>
+      <Stack direction="horizontal"
+        gap={3}
+        className="justify-content-center my-3">
       <Filter selectedTerm={selectedTerm} setSelectedTerm={setSelectedTerm}/>
+      <Menupage clickcourse={clickedcourse}/>
+      </Stack>
       <div><CourseList2 courses={courserData} selectedTerm={selectedTerm} clickedcourse={clickedcourse} handle_clickcourse={handle_clickcourse}/></div>
     </div>
     </QueryClientProvider>
