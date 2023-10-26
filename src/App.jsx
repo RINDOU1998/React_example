@@ -98,8 +98,10 @@ const Banner = ({ title }) => (
     </div>
   );
   
-  const CourseCard = ({ course }) => (
-    <div className="course-card card">
+  const CourseCard = ({ course }) => {
+
+   // console.log(course.term)
+   return( <div className="course-card card">
       <div className="card-body">
         <h5 className="card-title">
           {course.term} {course.number}
@@ -108,23 +110,53 @@ const Banner = ({ title }) => (
           {course.title}
         </h6>
         <p className="card-text">
+          <strong>Term:</strong> {course.term}
+        </p>
+        <p className="card-text">
           <strong>Meets:</strong> {course.meets}
         </p>
       </div>
     </div>
   );
-  
-  const CourseList2 = ({ courses }) => (
+  }
+  const CourseList2 = ({ courses,selectedTerm,clickedcourse,handle_clickcourse}) => {
+    const filter_course=Object.entries(courses).filter(
+        (course)=> course[1].term===selectedTerm
+    );
+    
+      //console.log(filter_course.map((course)=>course[1].term))
+      //console.log(filter_course)
+      console.log(selectedTerm)
+    //   console.log(Object.entries(courses).map(
+    //     (course)=> course.term===selectedTerm
+    // ))
+    return(
     <div className="course-list">
-      {Object.keys(courses).map(courseKey => (
-        <CourseCard key={courseKey} course={courses[courseKey]} />
+      {filter_course.map(([cid,course]) => (
+        <CourseCard key={cid} course={course} />
       ))}
     </div>
   );
+      }
   
   //<Banner title={schedule.title} />
   const App = () => {
    const [courserData,set_coursedata]=useState([])
+   const [selectedTerm, setSelectedTerm] = useState("Fall");
+   const [clickedcourse,setclickedcourse]=useState([])
+  const handle_clickcourse =(course) =>{
+      if (clickedcourse.includes(course)){
+        setclickedcourse(clickedcourse.filter((clickcourse)=> clickcourse!=course))//delete the course from clicked
+    }
+      else{
+        setclickedcourse([...clickedcourse,course]) //add course to clicked
+      }
+
+  }
+
+
+
+
 return(
     <QueryClientProvider client={queryClient}>
     <div className="container">
@@ -133,8 +165,8 @@ return(
       <Example courseData={courserData} set_coursedata={set_coursedata} />
       
       </ul>
-      
-      <div><CourseList2 courses={courserData} /></div>
+      <Filter selectedTerm={selectedTerm} setSelectedTerm={setSelectedTerm}/>
+      <div><CourseList2 courses={courserData} selectedTerm={selectedTerm}/></div>
     </div>
     </QueryClientProvider>
   );
