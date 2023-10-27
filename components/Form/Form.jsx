@@ -11,7 +11,7 @@ const validateUserData = (key, val) => {
     case 'title': 
       return /(^\w\w)/.test(val) ? '' : 'must be least two character';
     case 'meets':
-        return  /^[MTWTFSS]+ \d{1,2}:\d{2}-\d{1,2}:\d{2}$/.test(val) ? '' : ''.test(val) ?'':'it should be like MWF 10:00-10:50';
+        return  /^[MTWTFSS]+ \d{1,2}:\d{2}-\d{1,2}:\d{2}$/.test(val)||val==='' ? '' : 'it should be like MWF 10:00-10:50';
     default: return '';
   }
 };
