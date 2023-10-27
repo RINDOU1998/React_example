@@ -10,6 +10,8 @@ import { Modal } from "../components/Modal/Modal"
 import {Menupage} from "../components/Menupage/Menupage"
 import Stack from "react-bootstrap/Stack";
 import { Check_timeconflict } from './utilities/check_confilct';
+import {UserEditor} from "../components/Form/Form"
+import { BrowserRouter, Route, Routes, Link, useNavigate } from 'react-router-dom';
   
 const Example = (prop) =>{
   const {courseData, set_coursedata}=prop
@@ -114,6 +116,13 @@ const Banner = ({ title }) => (
    // console.log(cid)
    // console.log(course.term)
    //console.log(courses)
+
+  //  const [isEditing, setEditing] = useState(false); //set editing
+  //   const buttonclick=(event)=>{
+      
+  //     setEditing(!isEditing)
+  //     event.stopPropagation();
+  //   }
    return( <div className="course-card card " onClick={() => handle_clickcourse(cid)}>
       <div className={`card-body ${clickedcourse.includes(cid) ? 'selected' : ''}`}>
 
@@ -130,9 +139,19 @@ const Banner = ({ title }) => (
           <strong>Meets:</strong> {course.meets}
         </p>
       </div>
+      <Link to={`/edit-form/${course.title} && ${course.meets}`}>
+            <button className="btn btn-outline-dark" style={{ width: "100px", }}>Edit</button>
+        </Link>
+
     </div>
   );
   }
+  // <button onClick={buttonclick} className="btn btn-primary">
+  //           Edit
+  //         </button>
+  //         <Modal open={isEditing} close={buttonclick} title={"Editing"}>
+  //       {"editing"}
+  //     </Modal>
   const CourseList2 = ({ courses,selectedTerm,clickedcourse,handle_clickcourse}) => {
     const filter_course=Object.entries(courses).filter(
         (course)=> course[1].term===selectedTerm
@@ -191,9 +210,13 @@ const Banner = ({ title }) => (
 
 return(
     <QueryClientProvider client={queryClient}>
+<BrowserRouter>
+<Routes>
+    <Route path="/" element={
     <div className="container">
         <ul>
       
+
       <Example courseData={courserData} set_coursedata={set_coursedata} />
       
       </ul>
@@ -202,12 +225,22 @@ return(
         className="justify-content-center my-3">
       <Filter selectedTerm={selectedTerm} setSelectedTerm={setSelectedTerm}/>
       <Menupage clickedcourse={clickedcourse} courseData={courserData}/>
+
+      
       </Stack>
       <div><CourseList2 courses={courserData} selectedTerm={selectedTerm} clickedcourse={clickedcourse} handle_clickcourse={handle_clickcourse}/></div>
 
        
 
 </div>
+} />
+
+<Route path="/edit-form/:course" element={
+            <UserEditor />
+          } />
+
+</Routes>
+</BrowserRouter>
     </QueryClientProvider>
   );
        }; 
