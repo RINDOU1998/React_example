@@ -101,11 +101,12 @@ const Banner = ({ title }) => (
 
   //clickedcourse.some(course=>course[0]===cid)
   const CourseCard = ({ cid, course,clickedcourse,handle_clickcourse}) => {
+
     //console.log(clickedcourse)
-    //console.log(cid)
+   // console.log(cid)
    // console.log(course.term)
-   return( <div className="course-card card " onClick={() => handle_clickcourse(course)}>
-      <div className={`card-body ${clickedcourse.includes(course) ? 'selected' : ''}`}>
+   return( <div className="course-card card " onClick={() => handle_clickcourse(cid)}>
+      <div className={`card-body ${clickedcourse.includes(cid) ? 'selected' : ''}`}>
 
         <h5 className="card-title">
           {course.term} {course.number}
@@ -129,7 +130,7 @@ const Banner = ({ title }) => (
     );
     
       //console.log(filter_course.map((course)=>course[1].term))
-      //console.log(filter_course)
+      //onsole.log(filter_course)
       //console.log(selectedTerm)
     //   console.log(Object.entries(courses).map(
     //     (course)=> course.term===selectedTerm
@@ -137,7 +138,7 @@ const Banner = ({ title }) => (
     return(
     <div className="course-list">
       {filter_course.map(([key,course]) => (
-        <CourseCard key={key} course={course} clickedcourse={clickedcourse} handle_clickcourse={handle_clickcourse}/>
+        <CourseCard key={key} cid={key} course={course} clickedcourse={clickedcourse} handle_clickcourse={handle_clickcourse}/>
       ))}
     </div>
   );
@@ -173,7 +174,7 @@ return(
         gap={3}
         className="justify-content-center my-3">
       <Filter selectedTerm={selectedTerm} setSelectedTerm={setSelectedTerm}/>
-      <Menupage clickcourse={clickedcourse}/>
+      <Menupage clickedcourse={clickedcourse} courseData={courserData}/>
       </Stack>
       <div><CourseList2 courses={courserData} selectedTerm={selectedTerm} clickedcourse={clickedcourse} handle_clickcourse={handle_clickcourse}/></div>
     </div>

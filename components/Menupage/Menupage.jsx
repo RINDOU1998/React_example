@@ -4,26 +4,43 @@ import Modal from '../Modal/Modal';
 
 
 
-export const Menupage = (clickedcourse) => {
+export const Menupage = (prop) => {
+    //console.log(prop)
+   const {clickedcourse,courseData}=prop
   const [selected, setSelected] = useState([]);
   const [open, setOpen] = useState(false);
-
+    //console.log("click; "+Object.values(clickedcourse)[0])
+    //console.log(clickedcourse)
+    //console.log(typeof(clickedcourse))
+    //console.log(courseData["F101"])
+    //console.log("data     "+ JSON.stringify(courseData))
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
-  const courses = Object.values(clickedcourse);
-    console.log(courses[0])
+ 
+ // const ids=  Object.values(clickedcourse)[0]
+ 
+  //console.log(courses_f)
+const courses=Object.values(clickedcourse)
+//console.log(courses)
+
+//console.log(courses)
+
+
+
+   //const courses = Object.values(clickedcourse);
+     //console.log(courses[0])
   const Cart = (clickedcourse) => (
     
     <div className="cart" >
       {
-        courses[0].length === 0
+        courses.length === 0
         ? <h2>The cart is empty</h2>
         
-        :(courses[0]).map((course)=> (
-            <div className="class-info" key={course.number}>
-              <span>CS {course.number} </span>
-              <span>Title: {course.title} </span>
-              <span>Meets {course.meets} </span>
+        :(courses).map((courseid)=> (
+            <div className="class-info" key={courseid}>
+              <span>CS {courseData[courseid].number} </span>
+              <span>Title: {courseData[courseid].title} </span>
+              <span>Meets {courseData[courseid].meets} </span>
             </div>
 
           ))
