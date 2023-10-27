@@ -9,6 +9,7 @@ import {Filter} from '../components/Filter/Filter'
 import { Modal } from "../components/Modal/Modal"
 import {Menupage} from "../components/Menupage/Menupage"
 import Stack from "react-bootstrap/Stack";
+import { Check_timeconflict } from './utilities/check_confilct';
   
 const Example = (prop) =>{
   const {courseData, set_coursedata}=prop
@@ -100,11 +101,19 @@ const Banner = ({ title }) => (
   );
 
   //clickedcourse.some(course=>course[0]===cid)
-  const CourseCard = ({ cid, course,clickedcourse,handle_clickcourse}) => {
-
+  const CourseCard = ({ cid, course,clickedcourse,handle_clickcourse,courses}) => {
+    //const conflict=Check_timeconflict(course,clickedcourse,courses)
+    // if (conflict){
+    //   console.log("there is one")
+    //   console.log("they are  "+course.number+ "and ")
+    //   console.log(clickedcourse)
+    // }
+    
+    //console.log(conflict)
     //console.log(clickedcourse)
    // console.log(cid)
    // console.log(course.term)
+   //console.log(courses)
    return( <div className="course-card card " onClick={() => handle_clickcourse(cid)}>
       <div className={`card-body ${clickedcourse.includes(cid) ? 'selected' : ''}`}>
 
@@ -138,7 +147,7 @@ const Banner = ({ title }) => (
     return(
     <div className="course-list">
       {filter_course.map(([key,course]) => (
-        <CourseCard key={key} cid={key} course={course} clickedcourse={clickedcourse} handle_clickcourse={handle_clickcourse}/>
+        <CourseCard key={key} cid={key} course={course} clickedcourse={clickedcourse} handle_clickcourse={handle_clickcourse} courses={courses}/>
       ))}
     </div>
   );
@@ -150,16 +159,34 @@ const Banner = ({ title }) => (
    const [selectedTerm, setSelectedTerm] = useState("Fall");
    const [clickedcourse,setclickedcourse]=useState([])
   const handle_clickcourse =(course) =>{
+    //console.log(clickedcourse)
+    //console.log("course is "+course)
+    //console.log("data"+JSON.stringify(courserData))
+    // const conflict=Check_timeconflict(course,clickedcourse,courserData)
+    //   console.log(clickedcourse)
+    //  if(conflict){
+    //    console.log("there is one")
+     //}
+    if(Check_timeconflict(courserData[course],clickedcourse,courserData)){
+      console.log("conflict on "+course)
+    }
+    
+    else{
       if (clickedcourse.includes(course)){
         setclickedcourse(clickedcourse.filter((clickcourse)=> clickcourse!=course))//delete the course from clicked
     }
       else{
         setclickedcourse([...clickedcourse,course]) //add course to clicked
       }
+    }
 
   }
 
-
+   
+   //console.log("data     "+ JSON.stringify(courserData))
+  //console.log(courserData["F101"])
+   //const check=Check_timeconflict(courserData["F101"],clickedcourse,courserData)
+  
 
 
 return(
@@ -177,7 +204,10 @@ return(
       <Menupage clickedcourse={clickedcourse} courseData={courserData}/>
       </Stack>
       <div><CourseList2 courses={courserData} selectedTerm={selectedTerm} clickedcourse={clickedcourse} handle_clickcourse={handle_clickcourse}/></div>
-    </div>
+
+       
+
+</div>
     </QueryClientProvider>
   );
        }; 
@@ -185,3 +215,9 @@ return(
 //<fetchJson url={"https://courses.cs.northwestern.edu/394/guides/data/cs-courses.php"} /><Filter courseData={courserData} set_coursedata={set_coursedata}/>
 export default App;
 //
+
+// {Check_timeconflict(courserData["F211"],clickedcourse,courserData) ? (
+//   console.log('There is a time conflict.')
+// ) : (
+//   console.log('no conflict.')
+// )}
