@@ -135,7 +135,7 @@ const Banner = ({ title }) => (
           <strong>Meets:</strong> {course.meets}
         </p>
       </div>
-      <Link to={`/edit-form/${course.title} && ${course.meets}`}>
+      <Link to={`/edit-form/${cid} && ${course.title} && ${course.meets} && ${course.number} && ${course.term}`}>
             <button className="btn btn-outline-dark" style={{ width: "100px", }}>Edit</button>
         </Link>
 
