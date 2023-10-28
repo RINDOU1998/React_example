@@ -12,7 +12,8 @@ import Stack from "react-bootstrap/Stack";
 import { Check_timeconflict } from './utilities/check_confilct';
 import {UserEditor} from "../components/Form/Form"
 import { BrowserRouter, Route, Routes, Link, useNavigate } from 'react-router-dom';
-import { useDbData } from './utilities/firebase';
+import { useDbData,useAuthState } from './utilities/firebase';
+import { AuthButton } from '../components/Authbutton/Authbutton';
 
 const InitializeDB = (prop) =>{
   const {courseData, set_coursedata}=prop
@@ -99,7 +100,7 @@ const Banner = ({ title }) => (
   );
 
   //clickedcourse.some(course=>course[0]===cid)
-  const CourseCard = ({ cid, course,clickedcourse,handle_clickcourse,courses}) => {
+  const CourseCard = ({ cid, course,clickedcourse,handle_clickcourse,courses,user}) => {
     //const conflict=Check_timeconflict(course,clickedcourse,courses)
     // if (conflict){
     //   console.log("there is one")
@@ -135,10 +136,12 @@ const Banner = ({ title }) => (
           <strong>Meets:</strong> {course.meets}
         </p>
       </div>
+      {(user)?
       <Link to={`/edit-form/${cid} && ${course.title} && ${course.meets} && ${course.number} && ${course.term}`}>
             <button className="btn btn-outline-dark" style={{ width: "100px", }}>Edit</button>
         </Link>
-
+        :''
+  }
     </div>
   );
   }
@@ -148,7 +151,7 @@ const Banner = ({ title }) => (
   //         <Modal open={isEditing} close={buttonclick} title={"Editing"}>
   //       {"editing"}
   //     </Modal>
-  const CourseList2 = ({ courses,selectedTerm,clickedcourse,handle_clickcourse}) => {
+  const CourseList2 = ({ courses,selectedTerm,clickedcourse,handle_clickcourse,user}) => {
     const filter_course=Object.entries(courses).filter(
         (course)=> course[1].term===selectedTerm
     );
@@ -162,7 +165,7 @@ const Banner = ({ title }) => (
     return(
     <div className="course-list">
       {filter_course.map(([key,course]) => (
-        <CourseCard key={key} cid={key} course={course} clickedcourse={clickedcourse} handle_clickcourse={handle_clickcourse} courses={courses}/>
+        <CourseCard key={key} cid={key} course={course} clickedcourse={clickedcourse} handle_clickcourse={handle_clickcourse} courses={courses} user={user}/>
       ))}
     </div>
   );
@@ -173,6 +176,8 @@ const Banner = ({ title }) => (
    const [courserData,set_coursedata]=useState([])
    const [selectedTerm, setSelectedTerm] = useState("Fall");
    const [clickedcourse,setclickedcourse]=useState([])
+   const [user]=useAuthState()
+   console.log(user)
 const update_coursedata=(data)=>{
   set_coursedata(data)
 }
@@ -213,15 +218,17 @@ return(
       <InitializeDB courseData={courserData} set_coursedata={update_coursedata} />
       
       </ul>
+
       <Stack direction="horizontal"
-        gap={3}
+        gap={1}
         className="justify-content-center my-3">
+      <AuthButton />
       <Filter selectedTerm={selectedTerm} setSelectedTerm={setSelectedTerm}/>
       <Menupage clickedcourse={clickedcourse} courseData={courserData}/>
 
       
       </Stack>
-      <div><CourseList2 courses={courserData} selectedTerm={selectedTerm} clickedcourse={clickedcourse} handle_clickcourse={handle_clickcourse}/></div>
+      <div><CourseList2 courses={courserData} selectedTerm={selectedTerm} clickedcourse={clickedcourse} handle_clickcourse={handle_clickcourse} user={user}/></div>
 
        
 
