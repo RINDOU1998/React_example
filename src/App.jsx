@@ -12,33 +12,29 @@ import Stack from "react-bootstrap/Stack";
 import { Check_timeconflict } from './utilities/check_confilct';
 import {UserEditor} from "../components/Form/Form"
 import { BrowserRouter, Route, Routes, Link, useNavigate } from 'react-router-dom';
-  
-const Example = (prop) =>{
+import { useDbData } from './utilities/firebase';
+
+const InitializeDB = (prop) =>{
   const {courseData, set_coursedata}=prop
-  const { isLoading, error, data } = useQuery({
-    queryKey: ['repoData'],
-    queryFn: () =>
-      fetch('https://courses.cs.northwestern.edu/394/guides/data/cs-courses.php').then(
-        (res) => res.json(),
-      ),
-  })
+  
+  const [dbdata, error] = useDbData('/');
   useEffect(() => {
-    if (!isLoading && !error && data) {
-      set_coursedata(data.courses);
+    if (  !error && dbdata) {
+      set_coursedata(dbdata.courses);
     }
-  }, [isLoading, error, data, set_coursedata]);
+  }, [ error, dbdata, set_coursedata]);
 
-  if (isLoading) return 'Loading...'
 
-  if (error) return 'An error has occurred: ' + error.message
-  //console.log({courseData})
+  if (error) return <h1>Error loading data: {error.toString()}</h1>;
+  if (dbdata === undefined) return <h1>Loading data...</h1>;
+  if (!dbdata) return <h1>No data found</h1>;
   return (
     <div>
-      <h1>{data.title}</h1>
+      <h1>{dbdata.title}</h1>
      
     </div>
   )
-}
+  }
 
 const Main = () => {
     const [data, isLoading, error] = useJsonQuery('https://courses.cs.northwestern.edu/394/guides/data/cs-courses.php');
@@ -177,15 +173,12 @@ const Banner = ({ title }) => (
    const [courserData,set_coursedata]=useState([])
    const [selectedTerm, setSelectedTerm] = useState("Fall");
    const [clickedcourse,setclickedcourse]=useState([])
+const update_coursedata=(data)=>{
+  set_coursedata(data)
+}
+
   const handle_clickcourse =(course) =>{
-    //console.log(clickedcourse)
-    //console.log("course is "+course)
-    //console.log("data"+JSON.stringify(courserData))
-    // const conflict=Check_timeconflict(course,clickedcourse,courserData)
-    //   console.log(clickedcourse)
-    //  if(conflict){
-    //    console.log("there is one")
-     //}
+    
     if(Check_timeconflict(courserData[course],clickedcourse,courserData)){
       console.log("conflict on "+course)
     }
@@ -217,7 +210,7 @@ return(
         <ul>
       
 
-      <Example courseData={courserData} set_coursedata={set_coursedata} />
+      <InitializeDB courseData={courserData} set_coursedata={update_coursedata} />
       
       </ul>
       <Stack direction="horizontal"
