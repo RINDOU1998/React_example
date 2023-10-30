@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import {useQuery ,QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useJsonQuery } from './utilities/fetch';
-import {Filter} from '../components/Filter/Filter'
+import {Filter} from '../components/Filter/filter'
 import { Modal } from "../components/Modal/Modal"
 import {Menupage} from "../components/Menupage/Menupage"
 import Stack from "react-bootstrap/Stack";
